@@ -28,13 +28,18 @@ public class BaseCreditLogic {
      */
 
     private ArrayList<SecurityMasterRecord> SecurityMasterRecords;
-    protected final ArrayList<SecurityMasterRecord> getSecurityMasterRecords()
+    public final ArrayList<SecurityMasterRecord> getSecurityMasterRecords()
     {
         return SecurityMasterRecords;
     }
     protected final void setSecurityMasterRecords( ArrayList<SecurityMasterRecord> value)
     {
         SecurityMasterRecords = value;
+    }
+
+    public Optional<SecurityMasterRecord> GetSecurityMasterRecord(String maturityCode)
+    {
+        return SecurityMasterRecords.stream().filter((x) -> x.getSymbol().endsWith(maturityCode)).map(Optional::ofNullable).findFirst().orElse(null);
     }
 
     private Config Config;
@@ -96,14 +101,14 @@ public class BaseCreditLogic {
 
             potentialNetContracts += Orders.stream().filter(x ->   x.getCSide() == side
                                                                 && x.getCStatus() == Order._STATUS_OPEN
-                                                                && x.getSymbol() == security.getSymbol() )
+                                                                && x.getSymbol().equals(security.getSymbol()))
                                                     .collect(Collectors.toList()).stream()
                                                     .mapToDouble(x -> (x.getCSide() == Order._SIDE_BUY) ? x.getLvsQty() : (-1 * x.getLvsQty()))
                                                     .sum();
 
             DoLog(String.format("Potential Contracts for Security %1$s  after Orders:%2$s", security.getSymbol(), potentialNetContracts), MessageType.Information);
 
-            Optional<DailySettlementPrice> DSP = DailySettlementPrices.stream().filter((x) -> x.getSymbol() == security.getSymbol())
+            Optional<DailySettlementPrice> DSP = DailySettlementPrices.stream().filter((x) -> x.getSymbol().equals(security.getSymbol()))
                                                             .map(Optional::ofNullable).findFirst().orElse(null);
 
             if (DSP.isPresent() && DSP.get().getPrice() != null)

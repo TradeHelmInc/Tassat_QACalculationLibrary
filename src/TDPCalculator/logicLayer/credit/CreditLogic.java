@@ -44,7 +44,8 @@ public class CreditLogic extends BaseCreditLogic{
             currentExposure = (Math.abs(netContracts) * DSP.get().getPrice());
             finalExposure = (Math.abs(netContracts + qty) * DSP.get().getPrice());
         }
-        return finalExposure - currentExposure;
+        double expChange = finalExposure - currentExposure;
+        return Math.round(expChange*100)/100.0;
     }
 
     //endregion
@@ -61,7 +62,8 @@ public class CreditLogic extends BaseCreditLogic{
         //double exposure = Math.Max(Convert.ToDouble(PxM - BM), 0) / Config.MarginPct;
         double exposure = (double)(PxM - BM) / getConfig().getMarginPct();
         DoLog(String.format("Side %1$s exposure:%2$s", side, exposure), MessageType.Information);
-        return (double)(PxM - BM) / getConfig().getMarginPct();
+        double exp = (double)(PxM - BM) / getConfig().getMarginPct();
+        return Math.round(exp*100)/100.0;
 
     }
 
@@ -101,8 +103,9 @@ public class CreditLogic extends BaseCreditLogic{
                 creditUsed -= (CalculateCalendarMarginDiscounts(Positions, assetClass) / getConfig().getMarginPct());
             }
         }
+        double todayUsed = creditUsed - GetPriorDayCredit(firmId);
+        return -1* Math.round(todayUsed*100)/100.0; //We express the result as a negative number
 
-        return creditUsed - GetPriorDayCredit(firmId);
     }
 
 }
