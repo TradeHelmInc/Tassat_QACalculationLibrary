@@ -1,7 +1,7 @@
 package TDPCalculator.logicLayer.credit;
 
 import TDPCalculator.businessEntities.*;
-import TDPCalculator.common.enums.MessageType;
+import TDPCalculator.common.enums.*;
 
 import java.util.ArrayList;
 import java.util.Optional;

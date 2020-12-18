@@ -66,7 +66,15 @@ public class SecurityMasterRecord
 
     }
 
+    public final String GetMaturityCode()
+    {
+        String[] comp = getSymbol().split("-");
 
+        if (comp.length>0)
+            return comp[comp.length-1];
+        else
+            return "";
+    }
 
 
 

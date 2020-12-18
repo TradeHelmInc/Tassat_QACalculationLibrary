@@ -62,6 +62,8 @@ public class CreditBarPOC {
 
     }
 
+
+
     public static Config GetConfig()
     {
         return new Config(0.298,0.85,0.825,0.8);
